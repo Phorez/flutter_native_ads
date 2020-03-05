@@ -19,7 +19,6 @@ class NativeAdView extends StatefulWidget {
     this.onAdFailedToLoad,
     this.onAdLoaded,
   }) : super(key: key);
-
   final NativeAdViewCreatedCallback onParentViewCreated;
   final AndroidParam androidParam;
   final IOSParam iosParam;

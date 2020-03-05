@@ -1,9 +1,13 @@
 package sakebook.github.com.native_ads
 
 import android.content.Context
+import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.ads.mediation.NetworkExtras
+import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -38,6 +42,10 @@ class UnifiedAdLayout(context: Context, messenger: BinaryMessenger, id: Int, arg
         unifiedNativeAdView.findViewById<TextView>(context.resources.getIdentifier("flutter_native_ad_attribution", "id", hostPackageName)).apply {
             this.text = arguments["text_attribution"]
         }
+        val extras = Bundle()
+        extras.putString("npa", arguments["npa"])
+        val request = AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter::class.java, extras)
+                .build()
         AdLoader.Builder(context, arguments["placement_id"])
                 .forUnifiedNativeAd {
                     ad = it
@@ -72,8 +80,7 @@ class UnifiedAdLayout(context: Context, messenger: BinaryMessenger, id: Int, arg
                 .withNativeAdOptions(NativeAdOptions.Builder()
                         .build())
                 .build()
-                .loadAd(AdRequest.Builder()
-                        .build())
+                .loadAd(request)
     }
 
     override fun getView(): View {

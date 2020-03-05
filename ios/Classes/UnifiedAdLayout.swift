@@ -20,6 +20,7 @@ class UnifiedAdLayout : NSObject, FlutterPlatformView {
     private let placementId: String
     private let layoutName: String
     private let attributionText: String
+    private let nonPersonalizedAds: String
 
     private weak var unifiedNativeAdView: GADUnifiedNativeAdView!
     private weak var headlineView: UILabel!
@@ -42,7 +43,7 @@ class UnifiedAdLayout : NSObject, FlutterPlatformView {
         self.placementId = self.args["placement_id"] as! String
         self.layoutName = self.args["layout_name"] as! String
         self.attributionText = self.args["text_attribution"] as! String
-
+        self.nonPersonalizedAds = self.args["npa"] as! String
         self.adLoader = GADAdLoader(adUnitID: placementId, rootViewController: nil,
                     adTypes: [ .unifiedNative ], options: nil)
         channel = FlutterMethodChannel(name: "com.github.sakebook.ios/unified_ad_layout_\(viewId)", binaryMessenger: messeneger)
@@ -53,6 +54,9 @@ class UnifiedAdLayout : NSObject, FlutterPlatformView {
     private func fetchAd() {
         adLoader.delegate = self
         let request = GADRequest()
+        let extras = GADExtras()
+        extras.additionalParameters = ["npa": nonPersonalizedAds]
+        request.register(extras)
         adLoader.load(request)
     }
     
